@@ -24,7 +24,9 @@ public class DetailsModel : PageModel
 
         var book = await _context.Book
     .Include(b => b.Author)
-    .FirstOrDefaultAsync(m => m.ID == id);
+    .Include(b => b.BookCategories)
+    .ThenInclude(b => b.Category)
+.FirstOrDefaultAsync(m => m.ID == id);
         if (book is null)
         {
             return NotFound();

@@ -18,5 +18,6 @@ namespace Calbaza_Ioan_Lab2.Models
         public Publisher? Publisher { get; set; } // navigation property
         public int? AuthorID { get; set; }
         public Authors? Author { get; set; } // navigation property
+        public ICollection<BookCategory>? BookCategories { get; set; }
     }
 }

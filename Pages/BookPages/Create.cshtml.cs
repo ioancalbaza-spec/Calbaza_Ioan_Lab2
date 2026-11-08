@@ -6,7 +6,7 @@ using Calbaza_Ioan_Lab2.Models;
 
 namespace Calbaza_Ioan_Lab2.Pages.BookPages;
 
-public class CreateModel : PageModel
+public class CreateModel : BookCategoriesPageModel
 {
     private readonly Calbaza_Ioan_Lab2Context _context;
 
@@ -26,6 +26,8 @@ public class CreateModel : PageModel
     }).ToList(),
     "ID",
     "FullName");
+        Book = new Book { BookCategories = new List<BookCategory>() };
+        PopulateAssignedCategoryData(_context, Book);
         return Page();
     }
 
@@ -33,7 +35,7 @@ public class CreateModel : PageModel
     public Book Book { get; set; } = default!;
 
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD.
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
     {
         if (!ModelState.IsValid)
         {
@@ -52,7 +54,20 @@ public class CreateModel : PageModel
 
             return Page();
         }
+        if (selectedCategories != null)
+        {
+            Book.BookCategories = new List<BookCategory>();
 
+            foreach (var cat in selectedCategories)
+            {
+                var catToAdd = new BookCategory
+                {
+                    CategoryID = int.Parse(cat)
+                };
+
+                Book.BookCategories.Add(catToAdd);
+            }
+        }
         _context.Book.Add(Book);
         await _context.SaveChangesAsync();
 
